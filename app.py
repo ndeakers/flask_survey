@@ -13,6 +13,7 @@ responses = []
 
 @app.route('/')
 def show_homepage():
+    session["responses"] = []
     title = survey.title
     instructions = survey.instructions
     return render_template('survey_start.html',
@@ -38,8 +39,17 @@ def handle_answer():
     '''Takes in answer from user and adds value to responses[].
     Redirects user to next question unless they are at end of survey,
     then redirects to thank you page'''
-    responses.append(request.form.get('answer'))
+
+    responses = session['responses']
+    answer = request.form.get('answer')
+    responses.append(answer)
+    session['responses'] = responses
+
+    # session['responses'] = session['responses'].append(
+    #     request.form.get('answer'))
+
     print("responses =", responses)
+
     previous_question_num = int(request.form.get('question_num'))
     if previous_question_num < len(survey.questions)-1:
         next_question_num = previous_question_num + 1
