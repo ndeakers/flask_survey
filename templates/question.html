@@ -7,8 +7,10 @@
 
   <!-- you should have one item like this for every choice -->
   <p>
+	<input type="hidden" name="question_num" value="{{question_num}}">
     {% for choice in choices %}
-    <input type="radio" name="answer" value="{choice}">
+    <input type="radio" name="answer" value="{{choice}}">
+
     {{choice}}
     {% endfor %}
   </p>
