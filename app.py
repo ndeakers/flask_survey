@@ -10,6 +10,7 @@ debug = DebugToolbarExtension(app)
 
 responses = []
 
+
 @app.route('/')
 def show_homepage():
     title = survey.title
@@ -18,11 +19,14 @@ def show_homepage():
                            survey_title=title,
                            survey_instructions=instructions)
 
+
 @app.route('/questions/<question_num>')
 def show_question(question_num):
     question_list = survey.questions
     question_instance = question_list[int(question_num)]
     current_question = question_instance.question
     print('current question: ', current_question)
+    choices = question_instance.choices
     return render_template('question.html',
-                           current_question=current_question)
+                           current_question=current_question,
+                           choices=choices)
