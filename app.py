@@ -45,13 +45,10 @@ def handle_answer():
     responses.append(answer)
     session['responses'] = responses
 
-    # session['responses'] = session['responses'].append(
-    #     request.form.get('answer'))
-
     print("responses =", responses)
 
     previous_question_num = int(request.form.get('question_num'))
-    if previous_question_num < len(survey.questions)-1:
+    if previous_question_num < len(survey.questions) - 1:
         next_question_num = previous_question_num + 1
         return redirect(f'/questions/{next_question_num}')
     else:
