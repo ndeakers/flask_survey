@@ -27,7 +27,7 @@ def show_homepage():
 # check if their list starts with 0, if so, redirect them to the appropirate question number
 # page. use the length of questions_Alraedy_asnwered as the url to redirect.
 
-@app.route('/questions/<question_num>')
+@app.route('/questions/<int:question_num>')
 def show_question(question_num):
     # answered_list = session["questions_already_answered"]
     # answered_length = len(answered_list)
@@ -35,7 +35,7 @@ def show_question(question_num):
     #     return redirect(f'/questions/{answered_length}')
     # else:
         question_list = survey.questions
-        question_instance = question_list[int(question_num)]
+        question_instance = question_list[question_num]
         current_question = question_instance.question
         print('current question: ', current_question)
         choices = question_instance.choices
@@ -52,14 +52,14 @@ def handle_answer():
     then redirects to thank you page'''
 
     responses = session['responses']
-    answer = request.form.get('answer')
+    answer = request.form['answer']
     responses.append(answer)
     session['responses'] = responses
 
     print("session[responses] =", session["responses"])
 
-    previous_question_num = int(request.form.get('question_num'))
-    if previous_question_num < len(survey.questions) - 1:
+    previous_question_num = int(request.form['question_num']) #don't be safe when you don't need it. let it crash
+    if previous_question_num < len(survey.questions) - 1: #flip this
         next_question_num = previous_question_num + 1
         return redirect(f'/questions/{next_question_num}')
     else:
