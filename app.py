@@ -14,6 +14,7 @@ responses = []
 @app.route('/')
 def show_homepage():
     session["responses"] = []
+    #session["questions_already_answered"] = []
     title = survey.title
     instructions = survey.instructions
     return render_template('survey_start.html',
@@ -21,14 +22,24 @@ def show_homepage():
                            survey_instructions=instructions)
 
 
+#if the current question_num is greater than length of questions_already_answered,
+#  or quesiotns in survery (-1),
+# check if their list starts with 0, if so, redirect them to the appropirate question number
+# page. use the length of questions_Alraedy_asnwered as the url to redirect.
+
 @app.route('/questions/<question_num>')
 def show_question(question_num):
-    question_list = survey.questions
-    question_instance = question_list[int(question_num)]
-    current_question = question_instance.question
-    print('current question: ', current_question)
-    choices = question_instance.choices
-    return render_template('question.html',
+    # answered_list = session["questions_already_answered"]
+    # answered_length = len(answered_list)
+    # if answered_length != question_num:
+    #     return redirect(f'/questions/{answered_length}')
+    # else:
+        question_list = survey.questions
+        question_instance = question_list[int(question_num)]
+        current_question = question_instance.question
+        print('current question: ', current_question)
+        choices = question_instance.choices
+        return render_template('question.html',
                            current_question=current_question,
                            choices=choices,
                            question_num=question_num)
@@ -45,7 +56,7 @@ def handle_answer():
     responses.append(answer)
     session['responses'] = responses
 
-    print("responses =", responses)
+    print("session[responses] =", session["responses"])
 
     previous_question_num = int(request.form.get('question_num'))
     if previous_question_num < len(survey.questions) - 1:
